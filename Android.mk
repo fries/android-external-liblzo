@@ -1,8 +1,7 @@
 
 LOCAL_PATH:= $(call my-dir)
 
-include $(CLEAR_VARS)
-LOCAL_SRC_FILES:=  \
+common_SRC_FILES:=  \
 	src/lzo_crc.c \
 	src/lzo_init.c \
 	src/lzo_ptr.c \
@@ -72,14 +71,25 @@ LOCAL_SRC_FILES:=  \
 	src/lzo2a_d2.c
 
 
+common_C_INCLUDES += $(LOCAL_PATH)/include
+
+# static library
+# =====================================================
+
+include $(CLEAR_VARS)
+LOCAL_SRC_FILES:= $(common_SRC_FILES)
+LOCAL_C_INCLUDES:= $(common_C_INCLUDES)
+LOCAL_MODULE := liblzo-static
+LOCAL_PRELINK_MODULE:= false
+include $(BUILD_STATIC_LIBRARY)
+
+# dynamic library
+# =====================================================
+
+include $(CLEAR_VARS)
+LOCAL_SRC_FILES:= $(common_SRC_FILES)
+LOCAL_C_INCLUDES:= $(common_C_INCLUDES)
 LOCAL_MODULE := liblzo
-
-LOCAL_C_INCLUDES += external/lzo/src external/lzo/include
-
-LOCAL_PRELINK_MODULE := false
-
-
-#LOCAL_STATIC_LIBRARIES := libcutils libc
-
+LOCAL_PRELINK_MODULE:= false
 include $(BUILD_SHARED_LIBRARY)
 
